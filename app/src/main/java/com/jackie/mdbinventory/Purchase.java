@@ -15,7 +15,7 @@ public class Purchase {
     private String _description;
     private Date _date;
 
-    public Purchase(String merchant, String cost, String description, Date date) {
+    public Purchase(String merchant, String description, Date date, String cost) {
         _merchant = merchant;
         _cost = cost;
         _description = description;

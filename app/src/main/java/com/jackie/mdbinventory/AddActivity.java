@@ -1,5 +1,8 @@
 package com.jackie.mdbinventory;
 
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +16,8 @@ import android.widget.Toast;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.security.AccessController.getContext;
+
 public class AddActivity extends AppCompatActivity implements View.OnClickListener {
 
     /** Layout-related variables. */
@@ -21,6 +26,10 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private EditText _dateET;
     private EditText _costET;
     private Button _submitBtn;
+
+    /** SQL-related variables. */
+    private InventoryDbHelper _dbHelper;
+    private SQLiteDatabase _db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +53,19 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         _submitBtn = findViewById(R.id.submitBtn);
         _submitBtn.setOnClickListener(this);
 
+        // SQL Database Insertion
+        _dbHelper = new InventoryDbHelper(this);
+        // Get the database. If it does not exist, this is where it will
+        // also be created.
+        _db = _dbHelper.getWritableDatabase();
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        _dbHelper.close();
+        super.onDestroy();
     }
 
     /** Handles all the clicks. */
@@ -52,8 +74,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.submitBtn:
                 // Check if there's a valid event name. Must declare as final in order to access in OnSuccessListener
-                final String eventName = _merchantET.getText().toString();
-                if (eventName == null || eventName.equals("")) {
+                final String merchant = _merchantET.getText().toString();
+                if (merchant == null || merchant.equals("")) {
                     Toast.makeText(AddActivity.this, "Please enter an event name.", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -90,7 +112,10 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     Toast.makeText(AddActivity.this, "Please input the cost with 2 decimal places.", Toast.LENGTH_LONG).show();
                     return;
                 }
-
+                ContentValues values = Utils.insertEntries(merchant, description, date, cost);
+                long newRowId = _db.insert(Inventory.InventoryEntry.TABLE_NAME, null, values);
+                Intent i = new Intent(AddActivity.this, MainActivity.class);
+                startActivity(i);
         }
     }
 }

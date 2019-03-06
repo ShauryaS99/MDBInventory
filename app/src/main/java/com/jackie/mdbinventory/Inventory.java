@@ -12,7 +12,7 @@ public final class Inventory {
         public static final String COLUMN_DATE = "date";
         public static final String COLUMN_COST = "cost";
 
-        private static final String SQL_CREATE_ENTRIES =
+        public static final String SQL_CREATE_ENTRIES =
                 "CREATE TABLE " + InventoryEntry.TABLE_NAME + " (" +
                         InventoryEntry._ID + " INTEGER PRIMARY KEY," +
                         InventoryEntry.COLUMN_MERCHANT_NAME + " TEXT," +
@@ -20,7 +20,7 @@ public final class Inventory {
                         InventoryEntry.COLUMN_DATE + " TEXT," +
                         InventoryEntry.COLUMN_COST + " TEXT)";
 
-        private static final String SQL_DELETE_ENTRIES =
+        public static final String SQL_DELETE_ENTRIES =
                 "DROP TABLE IF EXISTS " + InventoryEntry.TABLE_NAME;
 
     }
