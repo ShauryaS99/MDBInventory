@@ -56,7 +56,7 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.Purcha
             Purchase p = _purchases.get(position);
             _merchant.setText(p.getMerchant());
             _description.setText(p.getDescription());
-            _date.setText(p.getDate());
+            _date.setText(p.getDate().substring(0, 10) + ", " + p.getDate().substring(24));
             _cost.setText(p.getCost());
 
         }

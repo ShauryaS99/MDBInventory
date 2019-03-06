@@ -4,7 +4,10 @@
  * */
 package com.jackie.mdbinventory;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Purchase {
     private String _merchant;
@@ -14,7 +17,7 @@ public class Purchase {
 
     public Purchase(String merchant, String cost, String description, Date date) {
         _merchant = merchant;
-        _cost = "- $" + cost;
+        _cost = cost;
         _description = description;
         _date = date;
     }
@@ -28,7 +31,11 @@ public class Purchase {
     }
 
     public String getCost() {
-        return _cost;
+        NumberFormat n = NumberFormat.getCurrencyInstance(Locale.US);
+        String s = n.format(Double.parseDouble(_cost));
+        // DecimalFormat dec = new DecimalFormat("#0.00");
+        // return "- $" + _cost;
+        return s;
     }
 
     public String getDescription() {
