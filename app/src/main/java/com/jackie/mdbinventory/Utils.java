@@ -1,7 +1,10 @@
 package com.jackie.mdbinventory;
 
 import android.content.ContentValues;
+import android.support.constraint.ConstraintLayout;
+import android.view.View;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -11,6 +14,16 @@ import java.util.Date;
  * */
 
 public class Utils {
+
+    public static <T> void updateView(View v, ArrayList<T> arr) {
+        ConstraintLayout _hasItemsLayout = v.findViewById(R.id.containsItems);
+        ConstraintLayout _noItemsLayout = v.findViewById(R.id.containsNoItems);
+        if (arr == null || arr.size() == 0) {
+            _noItemsLayout.bringToFront();
+        } else {
+            _hasItemsLayout.bringToFront();
+        }
+    }
 
     /** Converts YEAR, MONTH, and DAY into a Date object. */
     public static Date convertToDate(int year, int month, int day) {

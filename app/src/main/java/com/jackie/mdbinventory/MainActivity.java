@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     /** View-related variables. */
     private RecyclerView _rView;
     private PurchaseAdapter _adapter;
+    private ConstraintLayout _hasItemsLayout;
+    private ConstraintLayout _noItemsLayout;
 
     /** Represents all the purchases made and inserted in the Inventory. */
     private ArrayList<Purchase> _purchases;
@@ -43,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         _rView = findViewById(R.id.purchasesRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         _rView.setLayoutManager(layoutManager);
-        _adapter = new PurchaseAdapter(this, _purchases);
+        _adapter = new PurchaseAdapter(this, _purchases, findViewById(R.id.mainLayout));
         _rView.setAdapter(_adapter);
 
         // Sets up toolbar.

@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -23,7 +24,7 @@ import static java.security.AccessController.getContext;
  * @date: 03/05/2019
  * */
 
-public class AddActivity extends AppCompatActivity implements View.OnClickListener {
+public class AddActivity extends AppCompatActivity implements View.OnClickListener, View.OnKeyListener {
 
     /** Layout-related variables. */
     private EditText _merchantET;
@@ -57,6 +58,10 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         _costET = findViewById(R.id.costET);
         _submitBtn = findViewById(R.id.submitBtn);
         _submitBtn.setOnClickListener(this);
+
+        // Setting listeners
+        _merchantET.setOnKeyListener(this);
+        _descET.setOnKeyListener(this);
 
         // SQL Database Insertion
         _dbHelper = new InventoryDbHelper(this);
@@ -96,10 +101,10 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     Toast.makeText(AddActivity.this, "Please enter a valid date.", Toast.LENGTH_LONG).show();
                     return;
                 }
-                Pattern p = Pattern.compile("^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\\d\\d$");
+                Pattern p = Pattern.compile("^(0[1-9]|1[012])/(0[1-9]|[12][0-9]|3[01])/(19|20)\\d\\d$");
                 Matcher m = p.matcher(date);
                 if (!m.find()) {
-                    Toast.makeText(AddActivity.this, "Please input the date in mm/dd/yyyy format.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddActivity.this, "Please input a valid date in mm/dd/yyyy format.", Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -120,5 +125,22 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 Intent i = new Intent(AddActivity.this, MainActivity.class);
                 startActivity(i);
         }
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        switch (v.getId()) {
+            case R.id.merchantET:
+                if (_merchantET.getText().length() >= 30)
+                    Toast.makeText(getApplicationContext(), "Please only input up to 30 characters.",
+                            Toast.LENGTH_SHORT).show();
+                return false;
+            case R.id.descET:
+                if (_descET.getText().length() >= 80)
+                    Toast.makeText(getApplicationContext(), "Please only input up to 80 characters.",
+                            Toast.LENGTH_SHORT).show();
+                return false;
+        }
+        return false;
     }
 }

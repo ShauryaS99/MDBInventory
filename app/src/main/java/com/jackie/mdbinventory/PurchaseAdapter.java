@@ -22,8 +22,9 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.Purcha
     private ArrayList<Purchase> _purchases;
     private InventoryDbHelper _dbHelper;
     private SQLiteDatabase _db;
+    private View _view;
 
-    public PurchaseAdapter(Context context, ArrayList<Purchase> purchases) {
+    public PurchaseAdapter(Context context, ArrayList<Purchase> purchases, View v) {
         _context = context;
         _purchases = purchases;
 
@@ -32,6 +33,7 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.Purcha
         // Get the database. If it does not exist, this is where it will
         // also be created.
         _db = _dbHelper.getWritableDatabase();
+        _view = v;
 
     }
 
@@ -39,6 +41,7 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.Purcha
     @Override
     public PurchaseAdapter.PurchaseViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(_context).inflate(R.layout.purchase_view, viewGroup, false);
+        Utils.updateView(_view.findViewById(R.id.mainLayout), _purchases);
         return new PurchaseViewHolder(v);
 
     }
@@ -103,6 +106,7 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.Purcha
             // notify the item removed by position
             // to perform recycler view delete animations
             notifyItemRemoved(position);
+            Utils.updateView(_view, _purchases);
         }
     }
 

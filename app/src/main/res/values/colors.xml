@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimaryDark">#273740</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorWhite">#ffffff</color>
-    <color name="colorPastel1">#a7bed3</color>
-    <color name="colorPastel2">#c6e2e9</color>
-    <color name="colorPastel3">#F1FFC4</color>
-    <color name="colorPastel4">#ffcaaf</color>
-    <color name="colorPastel5">#dab894</color>
+    <color name="colorRocket1">#2e4451</color>
+    <color name="colorRocket2">#fed36d</color>
+    <color name="colorRocket3">#ca594f</color>
 </resources>
