@@ -26,26 +26,29 @@ import java.util.List;
  * @date: 03/03/2019 */
 
 public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.PurchaseViewHolder> implements Filterable {
+    // Activity-related variables.
     private Context _context;
-    private ArrayList<Purchase> _purchases = new ArrayList<>();
+    private View _view;
+
+    // Represents the purchases to be used for RecyclerView.
+    private ArrayList<Purchase> _purchases;
     private ArrayList<Purchase> _filteredPurchases;
 
+    // SQL-Database variables.
     private InventoryDbHelper _dbHelper;
     private SQLiteDatabase _db;
-    private View _view;
 
     public PurchaseAdapter(Context context, ArrayList<Purchase> purchases, View v) {
         _context = context;
+        _view = v;
         _filteredPurchases = purchases;
         _purchases = new ArrayList<>(purchases);
-        Log.d("nani","purchases starting size: " + purchases.size());
 
         // SQL Database Insertion
         _dbHelper = new InventoryDbHelper(context);
         // Get the database. If it does not exist, this is where it will
         // also be created.
         _db = _dbHelper.getWritableDatabase();
-        _view = v;
 
     }
 
@@ -73,15 +76,12 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.Purcha
         return searchFilter;
     }
 
+    /** Creates a search filter based on the search query. */
     private Filter searchFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             ArrayList<Purchase> filteredList = new ArrayList<>();
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(_context);
-            SharedPreferences.Editor editor = sharedPref.edit();
             if (constraint == null || constraint.length() == 0) {
-                Log.d("nani","purchases: none");
-                Log.d("nani","purchases size: " + _purchases.size());
                 filteredList.addAll(_purchases);
             } else {
                 String prefix = constraint.toString().toLowerCase().trim();
@@ -90,15 +90,14 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.Purcha
                         filteredList.add(p);
                     }
                 }
-                editor.putString("prev", constraint.toString().toLowerCase().trim());
-                editor.apply();
-
+                Utils.writeToSharedPref(_context, constraint);
             }
             FilterResults results = new FilterResults();
             results.values = filteredList;
             return results;
         }
 
+        /** Updates RecyclerView with filtered results. */
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             _filteredPurchases.clear();
@@ -121,8 +120,6 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.Purcha
             _date = itemView.findViewById(R.id.dateTextView);
             _cost = itemView.findViewById(R.id.costTextView);
             _deletePurchase = itemView.findViewById(R.id.deletePurchase);
-
-
         }
 
         public void bind(int position) {
@@ -143,6 +140,8 @@ public class PurchaseAdapter extends RecyclerView.Adapter<PurchaseAdapter.Purcha
             }
         }
 
+        /** Handles removing a purchase at POSITION.
+         * Removes it from the SQL Database and the RecyclerView. */
         public void removeItem(int position) {
             Purchase p = _filteredPurchases.get(position);
             _purchases.remove(position);

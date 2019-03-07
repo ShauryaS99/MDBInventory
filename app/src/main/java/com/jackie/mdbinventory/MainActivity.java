@@ -1,14 +1,10 @@
 package com.jackie.mdbinventory;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,30 +40,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private InventoryDbHelper _dbHelper;
     private SQLiteDatabase _db;
 
-    private SharedPreferences _sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initializing variables.
         _purchases = new ArrayList<>();
         _addBtn = findViewById(R.id.addInventory);
         _addBtn.setOnClickListener(this);
+        _dbHelper = new InventoryDbHelper(this);
+        _db = _dbHelper.getReadableDatabase();
         _rView = findViewById(R.id.purchasesRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         _rView.setLayoutManager(layoutManager);
-
 
         // Sets up toolbar.
         Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        _dbHelper = new InventoryDbHelper(this);
-        _db = _dbHelper.getReadableDatabase();
+        // Populates _PURCHASES.
+        retrievePurchases();
 
-        _sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        // Must set adapter after _purchases is populated.
+        _adapter = new PurchaseAdapter(this, _purchases, findViewById(R.id.mainLayout));
+        _rView.setAdapter(_adapter);
 
+    }
+
+    /** Populates _PURCHASES array with entries in SQL Database. */
+    void retrievePurchases() {
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
@@ -101,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     cursor.getColumnIndexOrThrow(Inventory.InventoryEntry.COLUMN_DESCRIPTION));
             String date = cursor.getString(
                     cursor.getColumnIndexOrThrow(Inventory.InventoryEntry.COLUMN_DATE));
+            Log.d("nani", "date: " + date);
             Date d = Utils.convertToDate(Utils.getYearFromStr(date), Utils.getMonthFromStr(date), Utils.getDayFromStr(date));
             String cost = cursor.getString(
                     cursor.getColumnIndexOrThrow(Inventory.InventoryEntry.COLUMN_COST));
@@ -108,14 +112,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             _purchases.add(p);
         }
         cursor.close();
-
-        _adapter = new PurchaseAdapter(this, _purchases, findViewById(R.id.mainLayout));
-        _rView.setAdapter(_adapter);
-
     }
 
-
-    /** Creates all the menu options for the toolbar (the add button). */
+    /** Creates all the menu options for the toolbar (the search button). */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -138,25 +137,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        // Will set the search query to the most recent search, if present.
         _searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String prevFilter = _sharedPref.getString("prev", null);
+                String prevFilter = Utils.retrievePrevQuery(getApplicationContext());
                 _searchView.setQuery(prevFilter, false);
             }
         });
 
         ImageView closeButton = _searchView.findViewById(R.id.search_close_btn);
-        final SharedPreferences.Editor editor = _sharedPref.edit();
 
         // Set on click listener
         closeButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 _searchView.setQuery(null, false);
-                editor.putString("prev", null);
-                editor.apply();
+                Utils.resetQuery(getApplicationContext());
             }
         });
 
@@ -169,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
     }
 
+    /** Handles all the clicks. */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

@@ -11,10 +11,19 @@ import java.util.Locale;
  * */
 
 public class Purchase {
+    /** Represents the ID associated with SQL Database. */
     private long _id;
+
+    /** Represents the name of the merchant. */
     private String _merchant;
+
+    /** Represents the cost amount. */
     private String _cost;
+
+    /** Represents the description. */
     private String _description;
+
+    /** Represents the date. */
     private Date _date;
 
     public Purchase(long id, String merchant, String description, Date date, String cost) {
@@ -25,28 +34,30 @@ public class Purchase {
         _date = date;
     }
 
-    public double convertCostToDouble() {
-        return Double.parseDouble(_cost);
-    }
-
+    /** Returns the merchant name. */
     public String getMerchant() {
         return _merchant;
     }
 
+    /** Returns the cost amount. */
     public String getCost() {
+        // Formats the cost amount into money format.
         NumberFormat n = NumberFormat.getCurrencyInstance(Locale.US);
         String s = n.format(Double.parseDouble(_cost));
         return s;
     }
 
+    /** Returns the description. */
     public String getDescription() {
         return _description;
     }
 
+    /** Returns the date. */
     public String getDate() {
         return _date.toString();
     }
 
+    /** Returns the SQL Database ID. */
     public long getID() {
         return _id;
     }
