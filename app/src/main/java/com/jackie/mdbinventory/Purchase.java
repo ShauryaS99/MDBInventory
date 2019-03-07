@@ -36,8 +36,6 @@ public class Purchase {
     public String getCost() {
         NumberFormat n = NumberFormat.getCurrencyInstance(Locale.US);
         String s = n.format(Double.parseDouble(_cost));
-        // DecimalFormat dec = new DecimalFormat("#0.00");
-        // return "- $" + _cost;
         return s;
     }
 
@@ -45,7 +43,6 @@ public class Purchase {
         return _description;
     }
 
-    // Might want to reconsider what format to return for this
     public String getDate() {
         return _date.toString();
     }

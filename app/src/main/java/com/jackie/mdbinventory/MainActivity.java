@@ -1,17 +1,25 @@
 package com.jackie.mdbinventory;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 
 import java.util.ArrayList;
@@ -22,12 +30,12 @@ import java.util.Date;
  * @date: 03/03/2019
  * */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     /** View-related variables. */
     private RecyclerView _rView;
     private PurchaseAdapter _adapter;
-    private ConstraintLayout _hasItemsLayout;
-    private ConstraintLayout _noItemsLayout;
+    private FloatingActionButton _addBtn;
+    private SearchView _searchView;
 
     /** Represents all the purchases made and inserted in the Inventory. */
     private ArrayList<Purchase> _purchases;
@@ -36,25 +44,29 @@ public class MainActivity extends AppCompatActivity {
     private InventoryDbHelper _dbHelper;
     private SQLiteDatabase _db;
 
+    private SharedPreferences _sharedPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         _purchases = new ArrayList<>();
-        // fillDummyPurchases();
+        _addBtn = findViewById(R.id.addInventory);
+        _addBtn.setOnClickListener(this);
         _rView = findViewById(R.id.purchasesRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         _rView.setLayoutManager(layoutManager);
-        _adapter = new PurchaseAdapter(this, _purchases, findViewById(R.id.mainLayout));
-        _rView.setAdapter(_adapter);
+
 
         // Sets up toolbar.
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
         _dbHelper = new InventoryDbHelper(this);
         _db = _dbHelper.getReadableDatabase();
+
+        _sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
@@ -97,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
         }
         cursor.close();
 
+        _adapter = new PurchaseAdapter(this, _purchases, findViewById(R.id.mainLayout));
+        _rView.setAdapter(_adapter);
+
     }
 
 
@@ -104,26 +119,62 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.add_toolbar, menu);
-        return true;
-    }
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        _searchView = (SearchView) searchItem.getActionView();
+        _searchView.setMaxWidth(Integer.MAX_VALUE);
 
-    /** Handles selection of options for the Drawer. */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add:
-                Intent i = new Intent(this, AddActivity.class);
-                startActivity(i);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        _searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String text) {
+
+                _adapter.getFilter().filter(text);
+                return false;
+            }
+        });
+
+        _searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String prevFilter = _sharedPref.getString("prev", null);
+                _searchView.setQuery(prevFilter, false);
+            }
+        });
+
+        ImageView closeButton = _searchView.findViewById(R.id.search_close_btn);
+        final SharedPreferences.Editor editor = _sharedPref.edit();
+
+        // Set on click listener
+        closeButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                _searchView.setQuery(null, false);
+                editor.putString("prev", null);
+                editor.apply();
+            }
+        });
+
+        return true;
     }
 
     @Override
     protected void onDestroy() {
         _dbHelper.close();
         super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.addInventory:
+                Intent i = new Intent(this, AddActivity.class);
+                startActivity(i);
+        }
     }
 }
