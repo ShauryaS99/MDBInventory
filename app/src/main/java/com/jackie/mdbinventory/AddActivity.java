@@ -18,6 +18,11 @@ import java.util.regex.Pattern;
 
 import static java.security.AccessController.getContext;
 
+/** The activity for adding a purchase.
+ * @author: Jacqueline Zhang
+ * @date: 03/05/2019
+ * */
+
 public class AddActivity extends AppCompatActivity implements View.OnClickListener {
 
     /** Layout-related variables. */
@@ -58,8 +63,6 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         // Get the database. If it does not exist, this is where it will
         // also be created.
         _db = _dbHelper.getWritableDatabase();
-
-
     }
 
     @Override

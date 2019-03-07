@@ -2,6 +2,11 @@ package com.jackie.mdbinventory;
 
 import android.provider.BaseColumns;
 
+/** Represents the purchases made by MDB members.
+ * @author: Jacqueline Zhang
+ * @date: 03/05/2019
+ * */
+
 public final class Inventory {
     private Inventory() {}
 

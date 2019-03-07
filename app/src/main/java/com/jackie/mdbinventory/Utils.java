@@ -5,6 +5,11 @@ import android.content.ContentValues;
 import java.util.Calendar;
 import java.util.Date;
 
+/** Utils class.
+ * @author: Jacqueline Zhang
+ * @date: 03/03/2019
+ * */
+
 public class Utils {
 
     /** Converts YEAR, MONTH, and DAY into a Date object. */

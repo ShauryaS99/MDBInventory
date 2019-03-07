@@ -4,6 +4,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/** Inventory Database Helper.
+ * @author: Jacqueline Zhang
+ * @date: 03/05/2019
+ * */
 
 public class InventoryDbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;

@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,12 +12,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+
 import java.util.ArrayList;
 import java.util.Date;
 
+/** Main page for the mobile application, where all the purchases can be viewed.
+ * @author: Jacqueline Zhang
+ * @date: 03/03/2019
+ * */
+
 public class MainActivity extends AppCompatActivity {
-    /** Represents the RecyclerView. */
+    /** View-related variables. */
     private RecyclerView _rView;
+    private PurchaseAdapter _adapter;
 
     /** Represents all the purchases made and inserted in the Inventory. */
     private ArrayList<Purchase> _purchases;
@@ -38,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
         _rView = findViewById(R.id.purchasesRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         _rView.setLayoutManager(layoutManager);
-        PurchaseAdapter adapter = new PurchaseAdapter(this, _purchases);
-        _rView.setAdapter(adapter);
+        _adapter = new PurchaseAdapter(this, _purchases);
+        _rView.setAdapter(_adapter);
 
         // Sets up toolbar.
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -74,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
         while(cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex(Inventory.InventoryEntry._ID));
             String merchant = cursor.getString(
                     cursor.getColumnIndexOrThrow(Inventory.InventoryEntry.COLUMN_MERCHANT_NAME));
             String description = cursor.getString(
@@ -83,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             Date d = Utils.convertToDate(Utils.getYearFromStr(date), Utils.getMonthFromStr(date), Utils.getDayFromStr(date));
             String cost = cursor.getString(
                     cursor.getColumnIndexOrThrow(Inventory.InventoryEntry.COLUMN_COST));
-            Purchase p = new Purchase(merchant, description, d, cost);
+            Purchase p = new Purchase(id, merchant, description, d, cost);
             _purchases.add(p);
         }
         cursor.close();
@@ -117,19 +123,4 @@ public class MainActivity extends AppCompatActivity {
         _dbHelper.close();
         super.onDestroy();
     }
-
-    private void fillDummyPurchases() {
-        _purchases.add(new Purchase("99 Ranch Market", "5.95",
-                Utils.convertToDate(2019, 2, 3), "Mochi flour for baking"));
-        _purchases.add(new Purchase("Walgreens", "50.69",
-                Utils.convertToDate(2019, 2, 2), "Swimsuits"));
-        _purchases.add(new Purchase("Soda Hall", "2.50",
-                Utils.convertToDate(2019, 1, 30), "My GPA"));
-        _purchases.add(new Purchase("Target", "30.30",
-                Utils.convertToDate(2019, 1, 25), "Baking supplies for baking social"));
-        _purchases.add(new Purchase("Kanyes", "10000.00",
-                Utils.convertToDate(2019, 0, 1), "SUPREME"));
-    }
-
-
 }
