@@ -1,5 +1,6 @@
 package com.jackie.mdbinventory;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Date;
@@ -10,7 +11,7 @@ import java.util.Locale;
  * @date: 03/03/2019
  * */
 
-public class Purchase {
+public class Purchase implements Serializable {
     /** Represents the ID associated with SQL Database. */
     private long _id;
 

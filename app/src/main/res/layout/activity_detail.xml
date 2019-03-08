@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorRocket1"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Details" />
+
+    <TextView
+        android:id="@+id/merchantHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="21dp"
+        android:fontFamily="@font/roboto_condensed_bold"
+        android:text="MERCHANT"
+        android:textAllCaps="true"
+        android:textColor="@color/colorRocket1"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/imageView7"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
+
+    <TextView
+        android:id="@+id/dateHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="21dp"
+        android:fontFamily="@font/roboto_condensed_bold"
+        android:text="DATE"
+        android:textAllCaps="true"
+        android:textColor="@color/colorRocket1"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/imageView9"
+        app:layout_constraintTop_toBottomOf="@+id/descDetail" />
+
+    <TextView
+        android:id="@+id/costHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="21dp"
+        android:fontFamily="@font/roboto_condensed_bold"
+        android:text="COST"
+        android:textAllCaps="true"
+        android:textColor="@color/colorRocket1"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/imageView10"
+        app:layout_constraintTop_toBottomOf="@+id/dateDetail" />
+
+    <TextView
+        android:id="@+id/descHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="21dp"
+        android:fontFamily="@font/roboto_condensed_bold"
+        android:text="DESCRIPTION"
+        android:textAllCaps="true"
+        android:textColor="@color/colorRocket1"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/imageView8"
+        app:layout_constraintTop_toBottomOf="@+id/merchDetail" />
+
+    <TextView
+        android:id="@+id/merchDetail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="32dp"
+        android:fontFamily="@font/roboto_light"
+        android:text="merch"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView7"
+        app:layout_constraintTop_toBottomOf="@+id/merchantHeader" />
+
+    <TextView
+        android:id="@+id/descDetail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="33dp"
+        android:fontFamily="@font/roboto_light"
+        android:text="descriptionnn nn n "
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView8"
+        app:layout_constraintTop_toBottomOf="@+id/descHeader" />
+
+    <TextView
+        android:id="@+id/dateDetail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="33dp"
+        android:fontFamily="@font/roboto_light"
+        android:text="4/20/2019"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView9"
+        app:layout_constraintTop_toBottomOf="@+id/dateHeader" />
+
+    <TextView
+        android:id="@+id/costDetail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="32dp"
+        android:fontFamily="@font/roboto_light"
+        android:text="$$$$ chaching $$$"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView10"
+        app:layout_constraintTop_toBottomOf="@+id/costHeader" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="28dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/merchantHeader"
+        app:layout_constraintEnd_toStartOf="@+id/merchantHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/merchantHeader"
+        app:srcCompat="@drawable/ic_person_black" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="28dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/descHeader"
+        app:layout_constraintEnd_toStartOf="@+id/descHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/descHeader"
+        app:srcCompat="@drawable/ic_description_black" />
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="28dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/dateDetail"
+        app:layout_constraintEnd_toStartOf="@+id/dateHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/dateHeader"
+        app:srcCompat="@drawable/ic_date_black" />
+
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="28dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/costHeader"
+        app:layout_constraintEnd_toStartOf="@+id/costHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/costHeader"
+        app:srcCompat="@drawable/ic_money_black" />
+
+</android.support.constraint.ConstraintLayout>
