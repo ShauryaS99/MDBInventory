@@ -78,13 +78,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Inventory.InventoryEntry.COLUMN_MERCHANT_NAME,
                 Inventory.InventoryEntry.COLUMN_DESCRIPTION,
                 Inventory.InventoryEntry.COLUMN_DATE,
+                Inventory.InventoryEntry.COLUMN_DATE_LONG,
                 Inventory.InventoryEntry.COLUMN_COST
         };
 
 
         // How you want the results sorted in the resulting Cursor
         String sortOrder =
-                Inventory.InventoryEntry.COLUMN_DATE + " DESC";
+                Inventory.InventoryEntry.COLUMN_DATE_LONG + " DESC";
 
         Cursor cursor = _db.query(
                 Inventory.InventoryEntry.TABLE_NAME,   // The table to query

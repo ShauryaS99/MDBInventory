@@ -76,6 +76,7 @@ public class Utils {
         values.put(Inventory.InventoryEntry.COLUMN_MERCHANT_NAME, merchant);
         values.put(Inventory.InventoryEntry.COLUMN_DESCRIPTION, desc);
         values.put(Inventory.InventoryEntry.COLUMN_DATE, date);
+        values.put(Inventory.InventoryEntry.COLUMN_DATE_LONG, d.getTime());
         values.put(Inventory.InventoryEntry.COLUMN_COST, cost);
         return values;
     }
